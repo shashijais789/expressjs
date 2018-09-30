@@ -16,7 +16,7 @@ app.use(function (req, res, next) {
     // Pass to next layer of middleware
     next();
 });
-const courses = [{id: 1, name: 'Physics'}, {id: 2, name: 'Maths'}];
+//const courses = [{id: 1, name: 'Physics'}, {id: 2, name: 'Maths'}];
 const port = process.env.port || 8090;
 
 
@@ -41,6 +41,36 @@ app.get('/', (req, res) => {
 app.get('/api/fdi', (req, res) => {
     console.log('Get all feedback.')
     //connection.connect();
+    var objs = [];
+	
+    connection.query('SELECT * from lic.fdi', function (err, rows, fields) {
+      if (err) throw err
+      let length = rows.length;
+      for (var i = 0;i < length; i++) {
+          objs.push({
+            id: rows[i].id, 
+            policyNo: rows[i].policyNo, 
+            firstName: rows[i].firstName,
+            lastName: rows[i].lastName,
+            isPortalUsed: rows[i].isPortalUsed,
+            isOLRKnown: rows[i].isOLRKnown,
+            serviceRating: rows[i].serviceRating,
+            recommendRating: rows[i].recommendRating,
+            description: rows[i].description,
+            feedback_date: rows[i].feedback_date
+        });
+        
+      }
+	  
+      console.log(objs); 
+	  //objs = [{"id": 1, "policyNo": 90190, "firstName": "Shashi"}];
+      res.send(JSON.stringify(objs));
+    });
+});
+
+app.get('/api/fdi/report', (req, res) => {
+    console.log('Get all feedback report.')
+    var report = {};
     var objs = [];
 	
     connection.query('SELECT * from lic.fdi', function (err, rows, fields) {
@@ -122,18 +152,19 @@ app.post('/api/fdi', (req, res) => {
     res.send(course);
     */
 
+    console.log('Post method called !');
     console.log(req.body);
     const newFeedback = req.body;
     const query = 'insert into lic.fdi (policyNo, firstName, lastName, isPortalUsed, isOLRKnown, serviceRating,'+
         'recommendRating, description, feedback_date) values ('+
-        newFeedback.policyNo +', "'+ 
+        newFeedback.policyId +', "'+ 
         newFeedback.firstName +'", "'+ 
         newFeedback.lastName +'",'+
-        newFeedback.isPortalUsed + ', '+
-        newFeedback.isOLRKnown + ', '+
+        (newFeedback.isPortalUsed?1:0) + ', '+
+        (newFeedback.isOLRKnown?1:0) + ', '+
         newFeedback.serviceRating + ', '+
-        newFeedback.recommendRating + ', "' +
-        newFeedback.description + '", NOW())';
+        newFeedback.recomendationRating + ', "' +
+        newFeedback.experienceDesc + '", NOW())';
     connection.query(query, function (err, rows, fields) {
         if (err) throw err
         console.log('New feedback recorded.'); 
