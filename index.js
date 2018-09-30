@@ -24,10 +24,12 @@ app.get('/', (req, res) => {
     res.end();
 });
 
+
 app.get('/api/fdi', (req, res) => {
     console.log('Get all feedback.')
     //connection.connect();
     var objs = [];
+	
     connection.query('SELECT * from lic.fdi', function (err, rows, fields) {
       if (err) throw err
       let length = rows.length;
@@ -46,11 +48,26 @@ app.get('/api/fdi', (req, res) => {
         });
         
       }
+	  
       console.log(objs); 
+	  //objs = [{"id": 1, "policyNo": 90190, "firstName": "Shashi"}];
       res.send(JSON.stringify(objs));
     });
 });
 
+/* Sample for GET
+app.get('/api/fdi', (req, res) => {
+    console.log('Get all feedback.')
+    //connection.connect();
+    var objs = [];
+	
+      
+      console.log(objs); 
+	  objs = [{"id": 1, "policyNo": 90190, "firstName": "Shashi"}];
+      res.send(JSON.stringify(objs));
+    
+});
+*/
 app.get('/api/fdi/:id', (req, res) => {
     /*
     const course = courses.find(c => c.id === parseInt(req.params.id));
