@@ -1,8 +1,8 @@
 MSQL Download https://dev.mysql.com/downloads/installer/
 
-CREATE TABLE `lic`.`fdi` (
-  `id` INT NOT NULL AUTOINCREAMENT,
-  `policyNo` BIGINT(20) NOT NULL,
+CREATE TABLE `fdi` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `policyNo` bigint(20) NOT NULL,
   `firstName` varchar(45) NOT NULL,
   `lastName` varchar(45) NOT NULL,
   `isPortalUsed` tinyint(4) NOT NULL,
@@ -11,7 +11,8 @@ CREATE TABLE `lic`.`fdi` (
   `recommendRating` tinyint(4) NOT NULL,
   `description` varchar(45) NOT NULL,
   `feedback_date` date NOT NULL,
-PRIMARY KEY (`id`));
+  PRIMARY KEY (`id`)
+);
 
 # expressjs
 Express JS Learnig try outs
